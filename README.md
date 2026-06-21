@@ -275,24 +275,24 @@ ORDER BY genre, release_year;
 
 ## 📈 Key Findings
 #### Metric	Insight
-Content Distribution: The dataset contains a balanced mix of movies and TV shows
-Top Country	United States leads in content production
-Common Ratings	TV-MA and TV-14 are the most common ratings
-Recent Content: Significant increase in content added post-2020
-Genre Trends: Documentaries, Stand-up Comedy, and International shows are growing
-Directors: Top directors have multiple shows/movies on Netflix
-Content Quality	No director listed in a significant portion of content
+Content Distribution: The dataset contains a balanced mix of movies and TV shows \
+Top Country	United States leads in content production \
+Common Ratings	TV-MA and TV-14 are the most common ratings \
+Recent Content: Significant increase in content added post-2020 \
+Genre Trends: Documentaries, Stand-up Comedy, and International shows are growing \
+Directors: Top directors have multiple shows/movies on Netflix \
+Content Quality	No director listed in a significant portion of content \
 
 ## 📝 Key SQL Techniques Used
-Technique	Description
-Window Functions: RANK(), LAG() for advanced analytics
-Array Functions: UNNEST(), STRING_TO_ARRAY() for handling delimited data
-String Functions: SPLIT_PART(), TRIM() for data cleaning
-Subqueries: Common Table Expressions (CTEs) for complex analysis
-Conditional Logic: CASE statements for categorization
-Date Functions: TO_DATE(), EXTRACT() for temporal analysis
+Technique	Description \
+Window Functions: RANK(), LAG() for advanced analytics \
+Array Functions: UNNEST(), STRING_TO_ARRAY() for handling delimited data \
+String Functions: SPLIT_PART(), TRIM() for data cleaning \
+Subqueries: Common Table Expressions (CTEs) for complex analysis \
+Conditional Logic: CASE statements for categorization \
+Date Functions: TO_DATE(), EXTRACT() for temporal analysis \
 
 ## Reference
-youtube - Zero Analyst
+youtube - Zero Analyst \
 Creator - Najir H
 
