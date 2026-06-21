@@ -46,16 +46,17 @@ CREATE TABLE netflix (
 ```
 ## 🔍 Business Problems and Solutions
 ### 1. Count the Number of Movies vs TV Shows
-sql
+```sql
 SELECT 
     type,
     COUNT(type) AS total_count
 FROM netflix
 GROUP BY type;
-Objective: Determine the distribution of content types on Netflix.
+```
+#### Objective: Determine the distribution of content types on Netflix.
 
 ### 2. Top 10 Countries with Most Content
-sql
+```sql
 SELECT
     country,
     COUNT(*) AS total_titles
@@ -64,10 +65,11 @@ WHERE country IS NOT NULL
 GROUP BY country
 ORDER BY total_titles DESC
 LIMIT 10;
-Objective: Identify which countries contribute the highest number of titles to Netflix.
+```
+#### Objective: Identify which countries contribute the highest number of titles to Netflix.
 
 ### 3. Most Common Rating for Movies and TV Shows
-sql
+```sql
 SELECT 
     type,
     rating,
@@ -82,10 +84,11 @@ FROM (
     GROUP BY type, rating
 ) AS t1
 WHERE ranking = 1;
-Objective: Identify the most frequent rating for each content type.
+```
+#### Objective: Identify the most frequent rating for each content type.
 
 ### 4. Recent Content Analysis
-sql
+```sql
 -- Movies Released After 2020
 SELECT *
 FROM netflix
@@ -96,10 +99,11 @@ AND release_year >= 2020;
 SELECT *
 FROM netflix
 WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years';
-Objective: Analyze recent content additions and releases.
+```
+#### Objective: Analyze recent content additions and releases.
 
 ### 5. Top 10 Contributing Countries (Handling Multiple Countries)
-sql
+```sql
 SELECT 
     UNNEST(STRING_TO_ARRAY(country, ',')) AS new_country,
     COUNT(show_id) AS total_count
@@ -107,10 +111,11 @@ FROM netflix
 GROUP BY UNNEST(STRING_TO_ARRAY(country, ','))
 ORDER BY total_count DESC 
 LIMIT 10;
-Objective: Identify top countries when multiple countries are listed per title.
+```
+#### Objective: Identify top countries when multiple countries are listed per title.
 
 ### 6. Longest Movies
-sql
+```sql
 SELECT 
     title,
     duration
@@ -119,10 +124,11 @@ WHERE type = 'Movie'
 AND duration IS NOT NULL
 ORDER BY CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER) DESC
 LIMIT 10;
-Objective: Find movies with the longest duration.
+```
+#### Objective: Find movies with the longest duration.
 
 ### 7. Most Influential Directors
-sql
+```sql
 WITH directors AS (
     SELECT
         TRIM(UNNEST(STRING_TO_ARRAY(director, ','))) AS director_name
@@ -137,28 +143,31 @@ FROM directors
 GROUP BY director_name
 ORDER BY director_rank 
 LIMIT 10;
-Objective: Identify top 10 directors with most content on Netflix.
+```
+#### Objective: Identify top 10 directors with most content on Netflix.
 
 ### 8. TV Shows with More Than 5 Seasons
-sql
+```sql
 SELECT *
 FROM netflix
 WHERE type = 'TV Show'
 AND SPLIT_PART(duration, ' ', 1)::NUMERIC > 5;
-Objective: List all TV shows with more than 5 seasons.
+```
+#### Objective: List all TV shows with more than 5 seasons.
 
 ### 9. Content Distribution by Genre
-sql
+```sql
 SELECT 
     UNNEST(STRING_TO_ARRAY(listed_in, ',')) AS genre,
     COUNT(show_id) AS total_counts
 FROM netflix
 GROUP BY UNNEST(STRING_TO_ARRAY(listed_in, ','))
 ORDER BY total_counts DESC;
-Objective: Count the number of content items in each genre.
+```
+#### Objective: Count the number of content items in each genre.
 
 ### 10. India Content Release Analysis
-sql
+```sql
 SELECT
     EXTRACT(YEAR FROM TO_DATE(date_added, 'Month DD, YYYY')) AS year,
     COUNT(*) AS total_releases,
@@ -171,24 +180,27 @@ FROM netflix
 WHERE country = 'India'
 GROUP BY EXTRACT(YEAR FROM TO_DATE(date_added, 'Month DD, YYYY'))
 ORDER BY avg_content_per_year DESC;
-Objective: Calculate average content releases by India per year and return top years.
+```
+#### Objective: Calculate average content releases by India per year and return top years.
 
 ### 11. Documentaries
-sql
+```sql
 SELECT * 
 FROM netflix
 WHERE listed_in ILIKE '%documentaries';
-Objective: List all movies that are documentaries.
+```
+#### Objective: List all movies that are documentaries.
 
 ### 12. Content Without Director
-sql
+```sql
 SELECT * 
 FROM netflix
 WHERE director IS NULL;
-Objective: Find all content without a director listed.
+```
+#### Objective: Find all content without a director listed.
 
 ### 13. Genre Evolution Over Time
-sql
+```sql
 WITH genre_data AS (
     SELECT
         release_year,
@@ -202,10 +214,11 @@ SELECT
 FROM genre_data
 GROUP BY release_year, genre
 ORDER BY release_year DESC;
-Objective: Analyze how genres have evolved over time.
+```
+#### Objective: Analyze how genres have evolved over time.
 
 ### 14. Genre Growth Analysis
-sql
+```sql
 WITH genre_yearly AS (
     SELECT
         release_year,
@@ -227,10 +240,11 @@ SELECT
     total_titles - LAG(total_titles) OVER(PARTITION BY genre ORDER BY release_year) AS yoy_growth
 FROM genre_counts
 ORDER BY genre, release_year;
-Objective: Identify which genres are growing fastest year-over-year.
+```
+#### Objective: Identify which genres are growing fastest year-over-year.
 
 ### 15. Genre Growth Percentage
-sql
+```sql
 WITH genre_yearly AS (
     SELECT
         release_year,
@@ -256,26 +270,27 @@ SELECT
     ) AS growth_percent
 FROM genre_counts
 ORDER BY genre, release_year;
-Objective: Calculate percentage growth for each genre year-over-year.
+```
+#### Objective: Calculate percentage growth for each genre year-over-year.
 
 ## 📈 Key Findings
-Metric	Insight
-Content Distribution	The dataset contains a balanced mix of movies and TV shows
+#### Metric	Insight
+Content Distribution: The dataset contains a balanced mix of movies and TV shows
 Top Country	United States leads in content production
 Common Ratings	TV-MA and TV-14 are the most common ratings
-Recent Content	Significant increase in content added post-2020
-Genre Trends	Documentaries, Stand-up Comedy, and International shows are growing
-Directors	Top directors have multiple shows/movies on Netflix
+Recent Content: Significant increase in content added post-2020
+Genre Trends: Documentaries, Stand-up Comedy, and International shows are growing
+Directors: Top directors have multiple shows/movies on Netflix
 Content Quality	No director listed in a significant portion of content
 
 ## 📝 Key SQL Techniques Used
 Technique	Description
-Window Functions	RANK(), LAG() for advanced analytics
-Array Functions	UNNEST(), STRING_TO_ARRAY() for handling delimited data
-String Functions	SPLIT_PART(), TRIM() for data cleaning
-Subqueries	Common Table Expressions (CTEs) for complex analysis
-Conditional Logic	CASE statements for categorization
-Date Functions	TO_DATE(), EXTRACT() for temporal analysis
+Window Functions: RANK(), LAG() for advanced analytics
+Array Functions: UNNEST(), STRING_TO_ARRAY() for handling delimited data
+String Functions: SPLIT_PART(), TRIM() for data cleaning
+Subqueries: Common Table Expressions (CTEs) for complex analysis
+Conditional Logic: CASE statements for categorization
+Date Functions: TO_DATE(), EXTRACT() for temporal analysis
 
 ## Reference
 youtube - Zero Analyst
